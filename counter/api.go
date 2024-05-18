@@ -21,11 +21,11 @@ func GetSerializedCounters() []byte {
 
 // RegisterCounter 注册counter
 func RegisterCounter(counter *Counter) error {
-	value, ok := counterMap[counter.Name]
-	if !ok {
+	_, ok := counterMap[counter.Name]
+	if ok {
 		return fmt.Errorf("counter name existed")
 	}
-	counterMap[counter.Name] = value
+	counterMap[counter.Name] = counter
 	return nil
 }
 
