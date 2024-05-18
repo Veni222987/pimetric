@@ -1,3 +1,3 @@
-module github.com/veni222987/pimetric
+module github.com/Veni222987/pimetric
 
 go 1.22.1
