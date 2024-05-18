@@ -1,4 +1,4 @@
-package main
+package pimetric
 
 import (
 	"net/http"
