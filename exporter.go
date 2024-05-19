@@ -2,7 +2,6 @@ package pimetric
 
 import (
 	"encoding/json"
-	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -24,14 +23,14 @@ func GenHandler(appName string) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// ExportMetrics 新建端口启动监听
-func ExportMetrics(appName string) {
+// ExportMetrics 新建端口启动监听，返回端口
+func ExportMetrics(appName string) string {
 	http.HandleFunc("/metrics", GenHandler(appName))
-	err := http.ListenAndServe(":62888", nil)
-	for err != nil {
-		err = http.ListenAndServe(getRandomPort(), nil)
+	port := getRandomPort()
+	for http.ListenAndServe(port, nil) != nil {
+		port = getRandomPort()
 	}
-	log.Printf("启动监听, app name: " + appName)
+	return port
 }
 
 func getRandomPort() string {

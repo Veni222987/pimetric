@@ -86,6 +86,7 @@ func RegisterHistogram(histogram *historgram.Histogram) error {
 	return nil
 }
 
+// TODO 三个GET需要保证健壮性，不需要调用者判空，如果返回结果为空，生成一个新的
 // GetCounter 获取counter
 func GetCounter(metricName string) *counter.Counter {
 	lock := lockMap[COUNTER_KEY]
