@@ -85,3 +85,27 @@ func RegisterHistogram(histogram *historgram.Histogram) error {
 	metricMap[HISTOGRAM_KEY][histogram.GetName()] = histogram
 	return nil
 }
+
+// GetCounter 获取counter
+func GetCounter(metricName string) *counter.Counter {
+	lock := lockMap[COUNTER_KEY]
+	lock.Lock()
+	defer lock.Unlock()
+	return metricMap[COUNTER_KEY][metricName].(*counter.Counter)
+}
+
+// GetGauge 获取gauge
+func GetGauge(metricName string) *gauge.Gauge {
+	lock := lockMap[GAUGE_KEY]
+	lock.Lock()
+	defer lock.Unlock()
+	return metricMap[GAUGE_KEY][metricName].(*gauge.Gauge)
+}
+
+// GetHistogram 获取histogram
+func GetHistogram(metricName string) *historgram.Histogram {
+	lock := lockMap[HISTOGRAM_KEY]
+	lock.Lock()
+	defer lock.Unlock()
+	return metricMap[HISTOGRAM_KEY][metricName].(*historgram.Histogram)
+}
