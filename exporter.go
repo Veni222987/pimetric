@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+
+	"github.com/Veni222987/pimetric/store"
 )
 
 // GenHandler 指定appName生成handler，可以注册到已有的端口上
@@ -12,7 +14,11 @@ func GenHandler(appName string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		resMap := map[string]interface{}{
-			appName: GetMetricsMap(),
+			appName: map[string]interface{}{
+				store.COUNTER_KEY:   store.CounterMap,
+				store.GAUGE_KEY:     store.GaugeMap,
+				store.HISTOGRAM_KEY: store.HistogramMap,
+			},
 		}
 		resBytes, err := json.Marshal(resMap)
 		if err != nil {

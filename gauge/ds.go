@@ -8,10 +8,11 @@ import (
 
 // Gauge metric类型数据结构
 type Gauge struct {
-	Help  string         `json:"help"`
-	Name  string         `json:"name"`
-	Value float64        `json:"value"`
-	Type  api.MetricType `json:"type"`
+	Name      string         `json:"name"`
+	Help      string         `json:"help"`
+	Type      api.MetricType `json:"type"`
+	Timestamp int64          `json:"time_stamp"`
+	Value     float64        `json:"value"`
 }
 
 // GetHelp 获取指标的帮助信息
@@ -29,14 +30,9 @@ func (g *Gauge) GetName() string {
 	return g.Name
 }
 
-// Incr 增加指标的值(Gauge不支持)
-func (g *Gauge) Incr() error {
-	return fmt.Errorf("gauge can not incr")
-}
-
-// Decr 减少指标的值(Gauge不支持)
-func (g *Gauge) Decr() error {
-	return fmt.Errorf("gauge can not decr")
+// GetTimestamp 获取时间戳的方法
+func (c *Gauge) GetTimestamp() int64 {
+	return c.Timestamp
 }
 
 // GetValue 获取指标的值

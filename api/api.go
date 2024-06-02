@@ -16,12 +16,6 @@ type Metric interface {
 	GetType() MetricType
 	// GetName returns the name of the metric.
 	GetName() string
-	// Incr increments the value of the metric.
-	Incr() error
-	// Decr decrements the value of the metric.
-	Decr() error
-	// GetValue returns the value of the metric.
-	GetValue() any
-	// SetValue sets the value of the metric.
-	SetValue(value any) error
+	// GetTimestamp returns the timestamp of the metric
+	GetTimestamp() int64
 }

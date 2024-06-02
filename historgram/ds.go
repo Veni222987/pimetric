@@ -1,17 +1,22 @@
 package historgram
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/Veni222987/pimetric/api"
 )
+
+type HistoPoint struct {
+	Timestamp int64   `json:"time_stamp"`
+	Number    float64 `json:"number"`
+}
 
 // Histogram metric类型数据结构
 type Histogram struct {
 	Name  string         `json:"name"`
 	Help  string         `json:"help"`
 	Type  api.MetricType `json:"type"`
-	Value []float64      `json:"value"`
+	Value []HistoPoint   `json:"value"`
 }
 
 // GetHelp 获取metric的help信息
@@ -29,30 +34,15 @@ func (h *Histogram) GetName() string {
 	return h.Name
 }
 
-// Incr 自增(histogram不支持)
-func (h *Histogram) Incr() error {
-	return fmt.Errorf("histogram can not incr")
-}
-
-// Decr 自减(histogram不支持)
-func (h *Histogram) Decr() error {
-	return fmt.Errorf("histogram can not decr")
-}
-
 // GetValue 获取metric的值
 func (h *Histogram) GetValue() any {
 	return h.Value
 }
 
-// SetValue 设置metric的值
-func (h *Histogram) SetValue(value any) error {
-	if v, ok := value.([]float64); ok {
-		h.Value = v
-		return nil
-	}
-	return fmt.Errorf("value type error")
-}
-
-func (h *Histogram) Clear() {
-	h.Value = []float64{}
+// AddPoint 新增数据点
+func (h *Histogram) AddPoint(number float64) {
+	h.Value = append(h.Value, HistoPoint{
+		Timestamp: time.Now().UnixMilli(),
+		Number:    number,
+	})
 }
