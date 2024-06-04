@@ -1,7 +1,7 @@
 package gauge
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/Veni222987/pimetric/api"
 )
@@ -41,10 +41,8 @@ func (g *Gauge) GetValue() any {
 }
 
 // SetValue 设置指标的值
-func (g *Gauge) SetValue(value any) error {
-	if v, ok := value.(float64); ok {
-		g.Value = v
-		return nil
-	}
-	return fmt.Errorf("value type error")
+func (g *Gauge) SetValue(value float64) error {
+	g.Value = value
+	g.Timestamp = time.Now().Unix()
+	return nil
 }
