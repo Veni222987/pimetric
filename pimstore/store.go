@@ -1,4 +1,4 @@
-package store
+package pimstore
 
 import (
 	"log"
@@ -15,11 +15,18 @@ const (
 	HISTOGRAM_KEY = "histogram"
 )
 
-var (
-	CounterMap   map[string]*counter.Counter      = make(map[string]*counter.Counter)
-	GaugeMap     map[string]*gauge.Gauge          = make(map[string]*gauge.Gauge)
-	HistogramMap map[string]*historgram.Histogram = make(map[string]*historgram.Histogram)
-)
+// MetricxStorage 所有metrics的结构体
+type MetricxStorage struct {
+	CounterMap   map[string]*counter.Counter      `json:"counter_map"`
+	GaugeMap     map[string]*gauge.Gauge          `json:"gauge_map"`
+	HistogramMap map[string]*historgram.Histogram `json:"histogram_map"`
+}
+
+var Metricx = &MetricxStorage{
+	CounterMap:   make(map[string]*counter.Counter),
+	GaugeMap:     make(map[string]*gauge.Gauge),
+	HistogramMap: make(map[string]*historgram.Histogram),
+}
 
 // 每一个类型的metric都需要一个锁
 var lockMap = make(map[string]*sync.Mutex)
@@ -36,14 +43,14 @@ func CounterOf(metricName string) *counter.Counter {
 	lock := lockMap[COUNTER_KEY]
 	lock.Lock()
 	defer lock.Unlock()
-	if value, ok := CounterMap[metricName]; ok {
+	if value, ok := Metricx.CounterMap[metricName]; ok {
 		return value
 	}
 	rsp := &counter.Counter{
 		Name:  metricName,
 		Value: 0,
 	}
-	CounterMap[metricName] = rsp
+	Metricx.CounterMap[metricName] = rsp
 	return rsp
 }
 
@@ -52,14 +59,14 @@ func GaugeOf(metricName string) *gauge.Gauge {
 	lock := lockMap[GAUGE_KEY]
 	lock.Lock()
 	defer lock.Unlock()
-	if value, ok := GaugeMap[metricName]; ok {
+	if value, ok := Metricx.GaugeMap[metricName]; ok {
 		return value
 	}
 	rsp := &gauge.Gauge{
 		Name:  metricName,
 		Value: 0,
 	}
-	GaugeMap[metricName] = rsp
+	Metricx.GaugeMap[metricName] = rsp
 	return rsp
 }
 
@@ -68,13 +75,13 @@ func HistogramOf(metricName string) *historgram.Histogram {
 	lock := lockMap[HISTOGRAM_KEY]
 	lock.Lock()
 	defer lock.Unlock()
-	if value, ok := HistogramMap[metricName]; ok {
+	if value, ok := Metricx.HistogramMap[metricName]; ok {
 		return value
 	}
 	rsp := &historgram.Histogram{
 		Name:  metricName,
 		Value: make([]historgram.HistoPoint, 0),
 	}
-	HistogramMap[metricName] = rsp
+	Metricx.HistogramMap[metricName] = rsp
 	return rsp
 }
