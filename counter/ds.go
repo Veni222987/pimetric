@@ -42,14 +42,14 @@ func (c *Counter) GetTimestamp() int64 {
 // Incr counter的incr方法
 func (c *Counter) Incr() error {
 	atomic.AddInt64(&c.Value, 1)
-	c.Timestamp = time.Now().Unix()
+	c.Timestamp = time.Now().UnixMilli()
 	return nil
 }
 
 // Decr counter的decr方法
 func (c *Counter) Decr() error {
 	atomic.AddInt64(&c.Value, -1)
-	c.Timestamp = time.Now().Unix()
+	c.Timestamp = time.Now().UnixMilli()
 	return nil
 }
 
@@ -62,7 +62,7 @@ func (c *Counter) GetValue() any {
 func (c *Counter) SetValue(value any) error {
 	if v, ok := value.(int64); ok {
 		c.Value = v
-		c.Timestamp = time.Now().Unix()
+		c.Timestamp = time.Now().UnixMilli()
 		return nil
 	}
 	return fmt.Errorf("value type error")

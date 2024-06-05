@@ -43,6 +43,6 @@ func (g *Gauge) GetValue() any {
 // SetValue 设置指标的值
 func (g *Gauge) SetValue(value float64) error {
 	g.Value = value
-	g.Timestamp = time.Now().Unix()
+	g.Timestamp = time.Now().UnixMilli()
 	return nil
 }
