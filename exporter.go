@@ -33,6 +33,7 @@ func GenHandler(appName string) func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(err.Error()))
 			return
 		}
+		pimstore.ClearHistogram()
 		w.Write(resBytes)
 	}
 }

@@ -78,3 +78,12 @@ func HistogramOf(metricName string) *historgram.Histogram {
 	HistogramMap[metricName] = rsp
 	return rsp
 }
+
+func ClearHistogram() {
+	lock := lockMap[HISTOGRAM_KEY]
+	lock.Lock()
+	defer lock.Unlock()
+	for _, v := range HistogramMap {
+		v.Value = make([]historgram.HistoPoint, 0)
+	}
+}
